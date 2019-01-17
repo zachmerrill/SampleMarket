@@ -4,43 +4,93 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SampleMarket.Business;
 
 namespace SampleMarket.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
-    {
-        // GET: api/Products
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ProductsController : ControllerBase
+	{
+		private readonly IProductBO _productBO;
 
-        // GET: api/Products/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+		#region Constructors
 
-        // POST: api/Products
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+		/// <summary>
+		/// Instantiates a products controller
+		/// </summary>
+		/// <param name="productBO">Product business object</param>
+		public ProductsController(IProductBO productBO)
+		{
+			_productBO = productBO;
+		}
 
-        // PUT: api/Products/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+		#endregion
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-    }
+		#region HttpGet
+
+		/// <summary>
+		/// GET: api/Products
+		/// Gets all products with no filtering
+		/// </summary>
+		/// <returns>List of found products</returns>
+		[HttpGet]
+		public IActionResult Get()
+		{
+			return Ok(_productBO.GetProducts(false));
+		}
+
+		/// <summary>
+		/// GET: api/Products/Available
+		/// Gets all products with no filtering
+		/// </summary>
+		/// <returns>List of found products</returns>
+		[HttpGet("available", Name="GetAvailable")]
+		public IActionResult GetAvailable()
+		{
+			return Ok(_productBO.GetProducts(true));
+		}
+
+
+		/// <summary>
+		/// GET: api/Products/3
+		/// Gets the product with the id
+		/// </summary>
+		/// <param name="id">Product id</param>
+		/// <returns>Product or invalid id</returns>
+		[HttpGet("{id}", Name = "Get")]
+		public IActionResult Get(int id)
+		{
+			var product = _productBO.GetProduct(id);
+			if(product == null)
+			{
+				return NotFound(id);
+			}
+			return Ok(product);
+		}
+
+		#endregion
+
+		#region HttpPut
+
+		/// <summary>
+		/// PUT: api/Products/5
+		/// Puts an update to the inventory count of a product
+		/// </summary>
+		/// <param name="id">Product id</param>
+		/// <returns>Http Response Status Code</returns>
+		[HttpPut("{id}/purchase", Name = "PutPurchase")]
+		public IActionResult PutPurchase(int id)
+		{
+			bool success = _productBO.Purchase(id);
+			if (!success)
+			{
+				return NotFound();
+			}
+			return Ok();
+		}
+
+		#endregion
+
+	}
 }
