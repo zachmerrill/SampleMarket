@@ -44,7 +44,6 @@ namespace SampleMarket.Business
 			if (requireInventory)
 			{
 				// Get all products where inventory is greater than 0
-				//products = _context.Products.Where(p => p.InventoryCount > 0).ToList();
 				products = await _context.Products.Where(p => p.InventoryCount > 0).ToListAsync();
 			}
 			else

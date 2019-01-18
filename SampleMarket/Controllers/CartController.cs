@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SampleMarket.Business;
-using SampleMarket.Data;
 using SampleMarket.Models;
 
 namespace SampleMarket.Controllers
@@ -35,7 +31,7 @@ namespace SampleMarket.Controllers
 		/// <param name="id">Cart id</param>
 		/// <returns>List of cart items</returns>
 		[HttpGet("{id}")]
-        public async Task<IActionResult> GetCart(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
 			var cart = await _cartBO.GetCart(id);
 
@@ -89,7 +85,7 @@ namespace SampleMarket.Controllers
 		/// <param name="product">Product json</param>
 		/// <returns>Updated cart</returns>
 		[HttpPost("{id}")]
-		public async Task<IActionResult> AddProduct(Guid id, [FromBody]Product product)
+		public async Task<IActionResult> Add(Guid id, [FromBody]Product product)
 		{
 			var cart = await _cartBO.AddItem(id, product);
 			if(cart == null)
