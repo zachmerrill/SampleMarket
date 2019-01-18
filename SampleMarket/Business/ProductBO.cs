@@ -1,4 +1,5 @@
-﻿using SampleMarket.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SampleMarket.Data;
 using SampleMarket.Models;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,10 @@ namespace SampleMarket.Business
 		/// </summary>
 		/// <param name="id">Product Id</param>
 		/// <returns>Product</returns>
-		public Product GetProduct(int id)
+		public async Task<Product> GetProduct(int id)
 		{
 			// Get product where id matches passed id
-			return _context.Products.Where(p => p.Id == id).FirstOrDefault();
+			return await _context.Products.FindAsync(id);
 		}
 
 		/// <summary>
@@ -37,23 +38,29 @@ namespace SampleMarket.Business
 		/// </summary>
 		/// <param name="requireInventory">Whether inventory can be empty</param>
 		/// <returns>List of products</returns>
-		public IList<Product> GetProducts(bool requireInventory)
+		public async Task<IList<Product>> GetProducts(bool requireInventory = false)
 		{
 			List<Product> products = null;
 			if (requireInventory)
 			{
 				// Get all products where inventory is greater than 0
-				products = _context.Products.Where(p => p.InventoryCount > 0).ToList();
+				//products = _context.Products.Where(p => p.InventoryCount > 0).ToList();
+				products = await _context.Products.Where(p => p.InventoryCount > 0).ToListAsync();
 			}
 			else
 			{
 				// Get all products
-				products = _context.Products.ToList();
+				products = await _context.Products.ToListAsync();
 			}
 			return products;
 		}
 
-		public bool Purchase(int id)
+		/// <summary>
+		/// Lowers the inventory count of a product
+		/// </summary>
+		/// <param name="id">Product id</param>
+		/// <returns>The updated product</returns>
+		public async Task<Product> Purchase(int id)
 		{
 			throw new NotImplementedException();
 		}

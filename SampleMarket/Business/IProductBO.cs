@@ -8,8 +8,8 @@ namespace SampleMarket.Business
 {
 	public interface IProductBO
 	{
-		IList<Product> GetProducts(bool inventoryRequired);
-		Product GetProduct(int id);
-		bool Purchase(int id);
+		Task<IList<Product>> GetProducts(bool inventoryRequired = false);
+		Task<Product> GetProduct(int id);
+		Task<Product> Purchase(int id);
 	}
 }

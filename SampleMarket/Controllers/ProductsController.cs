@@ -35,9 +35,9 @@ namespace SampleMarket.Controllers
 		/// </summary>
 		/// <returns>List of found products</returns>
 		[HttpGet]
-		public IActionResult Get()
+		public async Task<IActionResult> Get()
 		{
-			return Ok(_productBO.GetProducts(false));
+			return Ok(await _productBO.GetProducts());
 		}
 
 		/// <summary>
@@ -45,10 +45,10 @@ namespace SampleMarket.Controllers
 		/// Gets all products with no filtering
 		/// </summary>
 		/// <returns>List of found products</returns>
-		[HttpGet("available", Name="GetAvailable")]
-		public IActionResult GetAvailable()
+		[HttpGet("available", Name="Available")]
+		public async Task<IActionResult> Available()
 		{
-			return Ok(_productBO.GetProducts(true));
+			return Ok(await _productBO.GetProducts(true));
 		}
 
 
@@ -59,9 +59,9 @@ namespace SampleMarket.Controllers
 		/// <param name="id">Product id</param>
 		/// <returns>Product or invalid id</returns>
 		[HttpGet("{id}", Name = "Get")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> Get(int id)
 		{
-			var product = _productBO.GetProduct(id);
+			var product = await _productBO.GetProduct(id);
 			if(product == null)
 			{
 				return NotFound(id);
@@ -71,23 +71,23 @@ namespace SampleMarket.Controllers
 
 		#endregion
 
-		#region HttpPut
+		#region HttpPatch
 
 		/// <summary>
 		/// PUT: api/Products/5
 		/// Puts an update to the inventory count of a product
 		/// </summary>
 		/// <param name="id">Product id</param>
-		/// <returns>Http Response Status Code</returns>
-		[HttpPut("{id}/purchase", Name = "PutPurchase")]
-		public IActionResult PutPurchase(int id)
+		/// <returns>Product or invalid id</returns>
+		[HttpPatch("{id}/purchase", Name = "Purchase")]
+		public async Task<IActionResult> Purchase(int id)
 		{
-			bool success = _productBO.Purchase(id);
-			if (!success)
+			var product = await _productBO.Purchase(id);
+			if (product == null)
 			{
-				return NotFound();
+				return NotFound(id);
 			}
-			return Ok();
+			return Ok(product);
 		}
 
 		#endregion
