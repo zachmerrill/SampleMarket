@@ -32,9 +32,9 @@ namespace SampleMarket.Business
 			throw new NotImplementedException();
 		}
 
-		public Task<int> GetSum(Guid id)
+		public Task<int?> GetSum(Guid id)
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 	}
 }
