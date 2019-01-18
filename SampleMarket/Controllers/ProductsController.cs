@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SampleMarket.Business;
+using SampleMarket.Models;
 
 namespace SampleMarket.Controllers
 {
@@ -34,10 +35,10 @@ namespace SampleMarket.Controllers
 		/// Gets all products with no filtering
 		/// </summary>
 		/// <returns>List of found products</returns>
-		[HttpGet]
+		[HttpGet(Name = "GetProducts")]
 		public async Task<IActionResult> Get()
 		{
-			return Ok(await _productBO.GetProducts());
+			return Ok(await _productBO.GetAllProducts());
 		}
 
 		/// <summary>
@@ -45,10 +46,10 @@ namespace SampleMarket.Controllers
 		/// Gets all products with no filtering
 		/// </summary>
 		/// <returns>List of found products</returns>
-		[HttpGet("available", Name="Available")]
+		[HttpGet("available", Name="ProductsAvailable")]
 		public async Task<IActionResult> Available()
 		{
-			return Ok(await _productBO.GetProducts(true));
+			return Ok(await _productBO.GetAllProducts(true));
 		}
 
 
@@ -58,11 +59,11 @@ namespace SampleMarket.Controllers
 		/// </summary>
 		/// <param name="id">Product id</param>
 		/// <returns>Product or invalid id</returns>
-		[HttpGet("{id}", Name = "Get")]
+		[HttpGet("{id}", Name = "GetProduct")]
 		public async Task<IActionResult> Get(int id)
 		{
 			var product = await _productBO.GetProduct(id);
-			if(product == null)
+			if (product == null)
 			{
 				return NotFound(id);
 			}
@@ -79,7 +80,7 @@ namespace SampleMarket.Controllers
 		/// </summary>
 		/// <param name="id">Product id</param>
 		/// <returns>Product or invalid id</returns>
-		[HttpPost("{id}/purchase", Name = "Purchase")]
+		[HttpPost("{id}/purchase", Name = "PurchaseProduct")]
 		public async Task<IActionResult> Purchase(int id)
 		{
 			var product = await _productBO.Purchase(id);

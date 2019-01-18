@@ -38,7 +38,7 @@ namespace SampleMarket.Business
 		/// </summary>
 		/// <param name="requireInventory">Whether inventory can be empty</param>
 		/// <returns>List of products</returns>
-		public async Task<IList<Product>> GetProducts(bool requireInventory = false)
+		public async Task<IList<Product>> GetAllProducts(bool requireInventory = false)
 		{
 			List<Product> products = null;
 			if (requireInventory)

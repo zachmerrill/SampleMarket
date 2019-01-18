@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SampleMarket.Models;
 
 namespace SampleMarket.Data
 {
@@ -14,5 +15,7 @@ namespace SampleMarket.Data
         }
 
         public DbSet<SampleMarket.Models.Product> Products { get; set; }
+
+        public DbSet<SampleMarket.Models.CartItem> CartItem { get; set; }
     }
 }
