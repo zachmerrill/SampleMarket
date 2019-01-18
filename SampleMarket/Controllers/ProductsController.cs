@@ -71,15 +71,15 @@ namespace SampleMarket.Controllers
 
 		#endregion
 
-		#region HttpPatch
+		#region HttpPost
 
 		/// <summary>
-		/// PUT: api/Products/5
+		/// Post: api/Products/5/purchase
 		/// Puts an update to the inventory count of a product
 		/// </summary>
 		/// <param name="id">Product id</param>
 		/// <returns>Product or invalid id</returns>
-		[HttpPatch("{id}/purchase", Name = "Purchase")]
+		[HttpPost("{id}/purchase", Name = "Purchase")]
 		public async Task<IActionResult> Purchase(int id)
 		{
 			var product = await _productBO.Purchase(id);

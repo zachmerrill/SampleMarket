@@ -62,7 +62,23 @@ namespace SampleMarket.Business
 		/// <returns>The updated product</returns>
 		public async Task<Product> Purchase(int id)
 		{
-			throw new NotImplementedException();
+			// Get product with id
+			var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
+			if (product != null)
+			{
+				// Attach product
+				// This allows us to update a single field
+				// Otherwise, the database would mark ALL fields as changed
+				_context.Attach(product);
+
+				// Subtract 1 from inventory count
+				product.InventoryCount--; 
+
+				// Save changes
+				await _context.SaveChangesAsync();
+			}
+			// return updated product
+			return product;
 		}
 	}
 }
