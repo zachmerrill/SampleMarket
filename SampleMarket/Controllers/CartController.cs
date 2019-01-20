@@ -140,7 +140,7 @@ namespace SampleMarket.Controllers
 		/// <param name="id">Cart id</param>
 		/// <param name="product">Product</param>
 		/// <returns>Updated cart</returns>
-		[HttpPost("{id}/Remove")]
+		[HttpDelete("{id}/Remove")]
 		public async Task<ActionResult<IList<CartItem>>> Remove(Guid id, [FromBody]Product product)
 		{
 			var cart = await _cartBO.RemoveItem(id, product);
