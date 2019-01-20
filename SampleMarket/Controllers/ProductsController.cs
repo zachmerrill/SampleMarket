@@ -72,7 +72,7 @@ namespace SampleMarket.Controllers
 			var product = await _productBO.GetProduct(id);
 			if (product == null)
 			{
-				return NotFound(id);
+				return NotFound();
 			}
 			return Ok(product);
 		}
@@ -93,7 +93,7 @@ namespace SampleMarket.Controllers
 			var product = await _productBO.Purchase(id);
 			if (product == null)
 			{
-				return NotFound(id);
+				return NotFound();
 			}
 			return Ok(product);
 		}

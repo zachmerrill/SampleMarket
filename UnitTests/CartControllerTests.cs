@@ -127,7 +127,41 @@ namespace UnitTests
 			var response = await controller.Add(guid, Common.CreateProduct(1));
 
 			// Assert
-			Assert.IsType<NotFoundObjectResult>(response.Result);
+			Assert.IsType<NotFoundResult>(response.Result);
+		}
+		#endregion
+
+		#region Test Remove Method
+		[Fact]
+		public async Task Remove_DatabaseHasCartWithId_OkResult()
+		{
+			// Assemble
+			Guid guid = new Guid();
+			Mock<ICartBO> cartProxy = new Mock<ICartBO>();
+			cartProxy.Setup(c => c.RemoveItem(It.IsAny<Guid>(), It.IsAny<Product>()))
+				.ReturnsAsync(Common.CreateCartItems(3));
+			var controller = new CartController(cartProxy.Object);
+
+			// Act
+			var response = await controller.Remove(guid, Common.CreateProduct(1));
+
+			// Assert
+			Assert.IsType<OkObjectResult>(response.Result);
+		}
+
+		[Fact]
+		public async Task Remove_DatabaseDoesntHaveCartWithId_NotFoundResult()
+		{
+			// Assemble
+			Guid guid = new Guid();
+			Mock<ICartBO> cartProxy = new Mock<ICartBO>();
+			var controller = new CartController(cartProxy.Object);
+
+			// Act
+			var response = await controller.Remove(guid, Common.CreateProduct(1));
+
+			// Assert
+			Assert.IsType<NotFoundResult>(response.Result);
 		}
 		#endregion
 
@@ -146,7 +180,7 @@ namespace UnitTests
 			var response = await controller.Checkout(guid);
 
 			// Assert
-			Assert.IsType<OkResult>(response);
+			Assert.IsType<OkObjectResult>(response);
 		}
 
 		[Fact]

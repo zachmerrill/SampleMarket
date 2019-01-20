@@ -74,8 +74,7 @@ namespace SampleMarket.Business
 						// Check if inventory count can support 1 more
 						if(cartItem.Quantity + 1 < foundProduct.InventoryCount)
 						{
-							cartItem.Quantity++; // Update db
-							cart[index].Quantity++; // Update our list
+							cartItem.Quantity++;
 						}
 					}
 
@@ -86,9 +85,65 @@ namespace SampleMarket.Business
 			return cart;
 		}
 
+		/// <summary>
+		/// Removes an item from the cart
+		/// </summary>
+		/// <param name="id">Cart id</param>
+		/// <param name="product">Product to remove</param>
+		/// <returns>List of cart items</returns>
+		public async Task<IList<CartItem>> RemoveItem(Guid id, Product product)
+		{
+			List<CartItem> cart = null;
+			if (product != null && id != null)
+			{
+				// Get the item from the database
+				var cartItem = await _context.CartItems.SingleOrDefaultAsync(item => item.ProductId == product.Id && item.CartId == id);
+				
+				if(cartItem != null)
+				{
+					// Check if quantity is 2 or more
+					if (cartItem.Quantity > 1)
+					{
+						// Attach
+						// This allows us to update a single field
+						// Otherwise, the database would mark ALL fields as changed
+						_context.Attach(cartItem);
+
+						// Subtract 1
+						cartItem.Quantity--;
+					}
+					else // Only 1 item in cart
+					{
+						// Remove that row entirely
+						_context.Remove(cartItem);
+					}
+
+					await _context.SaveChangesAsync();
+				}
+
+				cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
+			}
+			return cart;
+		}
+
+		/// <summary>
+		/// Checks out a cart by getting the sum and then 
+		/// removing from the database
+		/// </summary>
+		/// <param name="id">Cart id</param>
+		/// <returns>Total cost of the items</returns>
 		public async Task<int?> Checkout(Guid id)
 		{
-			throw new NotImplementedException();
+			int? cartTotal = null;
+			if (id != null)
+			{
+				// Get the total that was paid
+				cartTotal = await Sum(id);
+
+				// Clear up cart from database
+				await RemoveRows(id);
+			}
+			return cartTotal;
 		}
 
 		/// <summary>
@@ -110,15 +165,7 @@ namespace SampleMarket.Business
 			bool success = false;
 			if (id != null)
 			{
-				// Get all cart items with matching id
-				var cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
-
-				// Remove them all
-				_context.CartItems.RemoveRange(cart);
-
-				// Save
-				int rowsAffected = await _context.SaveChangesAsync();
-				if(rowsAffected > 0)
+				if (await RemoveRows(id) > 0)
 				{
 					success = true;
 				}
@@ -148,9 +195,37 @@ namespace SampleMarket.Business
 		#endregion
 
 		#region Private Methods
-		private async Task<int?> Sum (Guid id)
+		/// <summary>
+		/// Sums the cart with the given id
+		/// </summary>
+		/// <param name="id">Cart id</param>
+		/// <returns>Sum</returns>
+		private async Task<int?> Sum(Guid id)
 		{
-			throw new NotImplementedException();
+			// Linq query to get sum
+			var sum = (from c in _context.CartItems
+					 where c.CartId == id
+					 join p in _context.Products
+					 on c.ProductId equals p.Id
+					 select c.Quantity * p.Price);
+			return await sum.SumAsync();
+		}
+
+		/// <summary>
+		/// Removes all rows for the given id
+		/// </summary>
+		/// <param name="id">Cart id</param>
+		/// <returns>Rows affected</returns>
+		private async Task<int> RemoveRows(Guid id)
+		{
+			// Get all cart items with matching id
+			var cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
+
+			// Remove them all
+			_context.CartItems.RemoveRange(cart);
+
+			// Save
+			return await _context.SaveChangesAsync();
 		}
 		#endregion
 	}

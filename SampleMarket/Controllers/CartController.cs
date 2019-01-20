@@ -78,23 +78,24 @@ namespace SampleMarket.Controllers
 		}
 
 		/// <summary>
-		/// POST: api/Cart/1111-AAAA-2222-BBBB-3333
+		/// POST: api/Cart/1111-AAAA-2222-BBBB-3333/Add
 		/// Adds a product to the cart id
 		/// </summary>
 		/// <param name="id">Cart id</param>
 		/// <param name="product">Product json</param>
 		/// <returns>Updated cart</returns>
-		[HttpPost("{id}")]
+		[HttpPost("{id}/Add")]
 		public async Task<ActionResult<IList<CartItem>>> Add(Guid id, [FromBody]Product product)
 		{
 			var cart = await _cartBO.AddItem(id, product);
 			if (cart == null || cart.Count == 0)
 			{
-				return NotFound(id);
+				return NotFound();
 			}
 			// Return the updated cart
 			return Ok(cart);
 		}
+
 
 		/// <summary>
 		/// POST: api/Cart/1111-AAAA-2222-BBBB-3333/Checkout
@@ -109,7 +110,7 @@ namespace SampleMarket.Controllers
 			{
 				return NotFound();
 			}
-			return Ok();
+			return Ok(total);
 		}
 
 		#endregion
@@ -131,6 +132,24 @@ namespace SampleMarket.Controllers
 				return NotFound();
 			}
 			return Ok();
+		}
+
+		/// <summary>
+		/// Removes a product from the cart
+		/// </summary>
+		/// <param name="id">Cart id</param>
+		/// <param name="product">Product</param>
+		/// <returns>Updated cart</returns>
+		[HttpPost("{id}/Remove")]
+		public async Task<ActionResult<IList<CartItem>>> Remove(Guid id, [FromBody]Product product)
+		{
+			var cart = await _cartBO.RemoveItem(id, product);
+			if (cart == null || cart.Count == 0)
+			{
+				return NotFound();
+			}
+			// Return the updated cart
+			return Ok(cart);
 		}
 
 		#endregion

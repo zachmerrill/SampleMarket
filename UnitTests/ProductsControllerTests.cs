@@ -103,7 +103,7 @@ namespace UnitTests
 			var response = await controller.Get(id);
 
 			// Assert
-			Assert.IsType<NotFoundObjectResult>(response.Result);
+			Assert.IsType<NotFoundResult>(response.Result);
 		}
 		#endregion
 
@@ -137,7 +137,7 @@ namespace UnitTests
 			var response = await controller.Purchase(id);
 
 			// Assert
-			Assert.IsType<NotFoundObjectResult>(response.Result);
+			Assert.IsType<NotFoundResult>(response.Result);
 		}
 		#endregion
 	}

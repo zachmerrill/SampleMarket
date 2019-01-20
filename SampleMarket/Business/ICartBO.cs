@@ -9,6 +9,7 @@ namespace SampleMarket.Business
 	{
 		Guid CreateCart();
 		Task<IList<CartItem>> AddItem(Guid id, Product product);
+		Task<IList<CartItem>> RemoveItem(Guid id, Product product);
 		Task<IList<CartItem>> GetCart(Guid id);
 		Task<int?> GetTotal(Guid id);
 		Task<int?> Checkout(Guid id);
