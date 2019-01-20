@@ -100,7 +100,7 @@ Content-Type: application/json; charset=utf-8
 
 * [.NET Core](https://dotnet.microsoft.com/) - Microsoft's cross-platform, open source, modular implimentation of the .NET framework
 * [Azure](https://azure.microsoft.com/) - Microsoft's cloud hosting solution for applications, SQL, etc.
-* [SQL Server](https://www.microsoft.com/en-cy/sql-server/) - Database management, also hosted on Azure. 
+* [SQL Server](https://www.microsoft.com/en-cy/sql-server/) - Database management - also hosted on Azure. 
 
 ## ⚡ Installation
 ---
