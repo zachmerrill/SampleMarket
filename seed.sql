@@ -23,9 +23,9 @@ CREATE TABLE Products(
 
 /* Create some products in that table */
 INSERT INTO Products (Title, Price, InventoryCount) VALUES 
-('iPhone', 1099, 100),
-('Google Pixel', 899, 40),
-('Galaxy S9', 999, 0);
+('iPhone', 109900, 100),
+('Google Pixel', 89900, 40),
+('Galaxy S9', 99900, 0);
 
 /* 
 Create cart items table to store items
