@@ -97,7 +97,7 @@ namespace SampleMarket.Business
 		/// <returns>New guid</returns>
 		public Guid CreateCart()
 		{
-			return new Guid();
+			return Guid.NewGuid();
 		}
 
 		/// <summary>
