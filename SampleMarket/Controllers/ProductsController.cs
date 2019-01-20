@@ -36,7 +36,7 @@ namespace SampleMarket.Controllers
 		public async Task<ActionResult<IList<Product>>> GetAll()
 		{
 			var products = await _productBO.GetAllProducts();
-			if(products == null)
+			if (products == null || products.Count == 0)
 			{
 				return NotFound();
 			}
@@ -52,7 +52,7 @@ namespace SampleMarket.Controllers
 		public async Task<ActionResult<IList<Product>>> GetAvailable()
 		{
 			var products = await _productBO.GetAllProducts(true);
-			if(products == null)
+			if(products == null || products.Count == 0)
 			{
 				return NotFound();
 			}

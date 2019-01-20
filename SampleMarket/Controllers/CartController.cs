@@ -35,7 +35,7 @@ namespace SampleMarket.Controllers
 		{
 			var cart = await _cartBO.GetCart(id);
 
-			if (cart == null)
+			if (cart == null || cart.Count == 0)
 			{
 				return NotFound(id);
 			}
@@ -88,7 +88,7 @@ namespace SampleMarket.Controllers
 		public async Task<ActionResult<IList<CartItem>>> Add(Guid id, [FromBody]Product product)
 		{
 			var cart = await _cartBO.AddItem(id, product);
-			if (cart == null)
+			if (cart == null || cart.Count == 0)
 			{
 				return NotFound(id);
 			}
