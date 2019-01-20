@@ -52,7 +52,7 @@ namespace UnitTests
 			// Assemble
 			Guid guid = new Guid();
 			Mock<ICartBO> cartProxy = new Mock<ICartBO>();
-			cartProxy.Setup(c => c.GetSum(It.IsAny<Guid>()))
+			cartProxy.Setup(c => c.GetTotal(It.IsAny<Guid>()))
 				.ReturnsAsync(It.IsAny<int>());
 			var controller = new CartController(cartProxy.Object);
 
@@ -81,16 +81,16 @@ namespace UnitTests
 
 		#region Test Create Method
 		[Fact]
-		public async Task Create_CartCreatedSuccessful_OkResult()
+		public void Create_CartCreatedSuccessful_OkResult()
 		{
 			// Assemble
 			Mock<ICartBO> cartProxy = new Mock<ICartBO>();
 			cartProxy.Setup(c => c.CreateCart())
-				.ReturnsAsync(It.IsAny<Guid>());
+				.Returns(It.IsAny<Guid>());
 			var controller = new CartController(cartProxy.Object);
 
 			// Act
-			var response = await controller.Create();
+			var response = controller.Create();
 
 			// Assert
 			Assert.IsType<OkObjectResult>(response.Result);
@@ -139,7 +139,7 @@ namespace UnitTests
 			Guid guid = new Guid();
 			Mock<ICartBO> cartProxy = new Mock<ICartBO>();
 			cartProxy.Setup(c => c.Checkout(It.IsAny<Guid>()))
-				.ReturnsAsync(true);
+				.ReturnsAsync(It.IsAny<int>());
 			var controller = new CartController(cartProxy.Object);
 
 			// Act

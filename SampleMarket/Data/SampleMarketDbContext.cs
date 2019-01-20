@@ -11,6 +11,6 @@ namespace SampleMarket.Data
 
         public DbSet<SampleMarket.Models.Product> Products { get; set; }
 
-        public DbSet<SampleMarket.Models.CartItem> CartItem { get; set; }
+        public DbSet<SampleMarket.Models.CartItem> CartItems { get; set; }
     }
 }

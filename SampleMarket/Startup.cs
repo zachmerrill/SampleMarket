@@ -22,14 +22,13 @@ namespace SampleMarket
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			// services.AddDbContext<SampleMarketDbContext>(options =>
-			//       options.UseSqlServer(Configuration.GetConnectionString("SampleMarketDbContext")));
-
 			// Dependency injection of business objects
-			// This allows us to use the Moq framework to fake a BO for unit testing
-			services.AddTransient<IProductBO, ProductBO>()
-				.AddDbContext<SampleMarketDbContext>(options =>
-					options.UseSqlServer(Configuration.GetConnectionString("SampleMarketDbContext")));
+			// This allows us to use the Moq framework to fake the business objects for unit testing
+			// Without actually reaching out to the database
+			services.AddDbContext<SampleMarketDbContext>(options =>
+					options.UseSqlServer(Configuration.GetConnectionString("SampleMarketDbContext")))
+					.AddTransient<IProductBO, ProductBO>()
+					.AddTransient<ICartBO, CartBO>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

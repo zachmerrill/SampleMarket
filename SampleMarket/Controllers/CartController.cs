@@ -7,18 +7,18 @@ using SampleMarket.Models;
 
 namespace SampleMarket.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CartController : ControllerBase
-    {
-        private readonly ICartBO _cartBO;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class CartController : ControllerBase
+	{
+		private readonly ICartBO _cartBO;
 
 		#region Constructor
 
 		public CartController(ICartBO cartBO)
-        {
-            _cartBO = cartBO ?? throw new ArgumentNullException(nameof(cartBO));
-        }
+		{
+			_cartBO = cartBO ?? throw new ArgumentNullException(nameof(cartBO));
+		}
 
 		#endregion
 
@@ -31,17 +31,17 @@ namespace SampleMarket.Controllers
 		/// <param name="id">Cart id</param>
 		/// <returns>List of cart items</returns>
 		[HttpGet("{id}")]
-        public async Task<ActionResult<IList<CartItem>>> Get(Guid id)
-        {
+		public async Task<ActionResult<IList<CartItem>>> Get(Guid id)
+		{
 			var cart = await _cartBO.GetCart(id);
 
-            if (cart == null)
-            {
-                return NotFound(id);
-            }
+			if (cart == null)
+			{
+				return NotFound(id);
+			}
 
-            return Ok(cart);
-        }
+			return Ok(cart);
+		}
 
 		/// <summary>
 		/// GET: api/Cart/1111-AAAA-2222-BBBB-3333/Total
@@ -52,9 +52,9 @@ namespace SampleMarket.Controllers
 		[HttpGet("{id}/Total")]
 		public async Task<ActionResult<int>> GetTotalCost(Guid id)
 		{
-			int? sum = await _cartBO.GetSum(id);
+			int? sum = await _cartBO.GetTotal(id);
 
-			if(sum == null)
+			if (sum == null)
 			{
 				return NotFound(id);
 			}
@@ -68,14 +68,14 @@ namespace SampleMarket.Controllers
 
 		/// <summary>
 		/// POST: api/Cart
-		/// Creates a cart
+		/// Gets a cart id from the API
 		/// </summary>
 		/// <returns>The cart id</returns>
 		[HttpPost]
-        public async Task<ActionResult<Guid>> Create()
-        {
-			return Ok(await _cartBO.CreateCart());
-        }
+		public ActionResult<Guid> Create()
+		{
+			return Ok(_cartBO.CreateCart());
+		}
 
 		/// <summary>
 		/// POST: api/Cart/1111-AAAA-2222-BBBB-3333
@@ -88,7 +88,7 @@ namespace SampleMarket.Controllers
 		public async Task<ActionResult<IList<CartItem>>> Add(Guid id, [FromBody]Product product)
 		{
 			var cart = await _cartBO.AddItem(id, product);
-			if(cart == null)
+			if (cart == null)
 			{
 				return NotFound(id);
 			}
@@ -104,8 +104,8 @@ namespace SampleMarket.Controllers
 		[HttpPost("{id}/Checkout")]
 		public async Task<ActionResult> Checkout(Guid id)
 		{
-			bool success = await _cartBO.Checkout(id);
-			if (!success)
+			int? total = await _cartBO.Checkout(id);
+			if (total == null)
 			{
 				return NotFound();
 			}
@@ -123,8 +123,8 @@ namespace SampleMarket.Controllers
 		/// <param name="id">Cart id</param>
 		/// <returns>Id</returns>
 		[HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
-        {
+		public async Task<ActionResult> Delete(Guid id)
+		{
 			bool success = await _cartBO.DeleteCart(id);
 			if (!success)
 			{

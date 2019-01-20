@@ -13,7 +13,7 @@ namespace SampleMarket.Business
 		SampleMarketDbContext _context;
 
 		/// <summary>
-		/// Creates a ProductBO with database context
+		/// Creates a product business object with database context
 		/// </summary>
 		/// <param name="context">Database context</param>
 		public ProductBO(SampleMarketDbContext context)
@@ -44,7 +44,7 @@ namespace SampleMarket.Business
 			if (requireInventory)
 			{
 				// Get all products where inventory is greater than 0
-				products = await _context.Products.Where(p => p.InventoryCount > 0).ToListAsync();
+				products = await _context.Products.Where(prod => prod.InventoryCount > 0).ToListAsync();
 			}
 			else
 			{
@@ -62,10 +62,10 @@ namespace SampleMarket.Business
 		public async Task<Product> Purchase(int id)
 		{
 			// Get product with id
-			var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
+			var product = await _context.Products.SingleOrDefaultAsync(prod => prod.Id == id);
 			if (product != null)
 			{
-				// Attach product
+				// Attach
 				// This allows us to update a single field
 				// Otherwise, the database would mark ALL fields as changed
 				_context.Attach(product);
