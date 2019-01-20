@@ -94,6 +94,7 @@ Content-Type: application/json; charset=utf-8
 
 ## ⚡ Installation
 ---
+
 `Sample Market` requires [.NET Core](https://dotnet.microsoft.com/download) v2.2 to run.
 
 __SQL__
@@ -116,10 +117,13 @@ It's easiest to build and debug from Visual Studio, but you can also use dotnet.
 ```
 Now navigate to the API in your web browser.
 ## 💭 Final Thoughts
-___
+---
+
 __💲 Currency__
 All montary values are stored as an `int` cents value in the market. That's because [you should never use floats (or doubles) for currency.](https://husobee.github.io/money/float/2016/09/23/never-use-floats-for-currency.html) I assume that whatever UI is going to consume the RESTful service will do that conversion themselves.
+
 __🔒 Security__
 The API is configured for HTTPS (which should just be the standard anyway). Also, the deployed code is managed with Azure Active Directory in the cloud so that the connection string doesn't have to deploy with it. Obviously, this doesn't work locally but it's one of the reasons I decided to build it with a cloud focus.
+
 __🌱 Scalability__
 (Almost) all endpoints perform asynchronous calls to the database. Although the app is small right now and certainly doesn't get enough requests, this allows a lot of extra room for scalability. Making the API async was a must for me when looking to the cloud.
