@@ -140,8 +140,25 @@ namespace SampleMarket.Business
 				// Get the total that was paid
 				cartTotal = await Sum(id);
 
+				// Get all cart items with matching id
+				var cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
+				//var productIds = cart.Select(c => c.ProductId);
+
+				// Get list of products
+				var products = _context.Products.Where(prod => cart.Select(c => c.ProductId).Contains(prod.Id)).ToListAsync();
+
+				// Slow and intensive, but it's the only way
+				// with entity framework to update all items
+				foreach (var product in products.Result)
+				{
+					product.InventoryCount -= cart.Find(c => c.ProductId == product.Id).Quantity;
+				}
+
 				// Clear up cart from database
-				await RemoveRows(id);
+				_context.CartItems.RemoveRange(cart);
+
+				// Save
+				await _context.SaveChangesAsync();
 			}
 			return cartTotal;
 		}
@@ -165,7 +182,16 @@ namespace SampleMarket.Business
 			bool success = false;
 			if (id != null)
 			{
-				if (await RemoveRows(id) > 0)
+				// Get all cart items with matching id
+				var cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
+
+				// Remove them all
+				_context.CartItems.RemoveRange(cart);
+
+				// Save
+				int removedRows = await _context.SaveChangesAsync();
+
+				if (removedRows > 0)
 				{
 					success = true;
 				}
@@ -209,23 +235,6 @@ namespace SampleMarket.Business
 					 on c.ProductId equals p.Id
 					 select c.Quantity * p.Price);
 			return await sum.SumAsync();
-		}
-
-		/// <summary>
-		/// Removes all rows for the given id
-		/// </summary>
-		/// <param name="id">Cart id</param>
-		/// <returns>Rows affected</returns>
-		private async Task<int> RemoveRows(Guid id)
-		{
-			// Get all cart items with matching id
-			var cart = await _context.CartItems.Where(item => item.CartId == id).ToListAsync();
-
-			// Remove them all
-			_context.CartItems.RemoveRange(cart);
-
-			// Save
-			return await _context.SaveChangesAsync();
 		}
 		#endregion
 	}
