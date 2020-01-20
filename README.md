@@ -4,7 +4,7 @@
 
 `Sample Market` is a RESTful shop API built in .NET Core with scalability and the cloud in mind. 
 ### Usage
-The latest stable build is available for testing at https://samplemarket.azurewebsites.net/api/ OR you can clone and build the project yourself by following the installation instructions below.
+Clone and build the project yourself by following the installation instructions at the bottom.
 
 ### 👜 Products
 ---
@@ -14,21 +14,21 @@ __Get All Products__
 
 Retrieves all products, regardless of inventory count.
 ```HTTP
-GET https://samplemarket.azurewebsites.net/api/Products
+GET https://.../api/Products
 Content-Type: application/json; charset=utf-8
 ```
 __Get All *Available* Products__
 
 Retrieves all products, which have available inventory.
 ```HTTP
-GET https://samplemarket.azurewebsites.net/api/Products/Available
+GET https://.../api/Products/Available
 Content-Type: application/json; charset=utf-8
 ```
 __Get Single Product__
 
 Retrieves a single product with given ID.
 ```HTTP
-GET https://samplemarket.azurewebsites.net/api/Products/{product-id}
+GET https://.../api/Products/{product-id}
 Content-Type: application/json; charset=utf-8
 ```
 ### 🛒 Cart
@@ -39,21 +39,21 @@ __Create Cart__
 
 Returns a Guid which can be used to represent a cart
 ```HTTP
-POST https://samplemarket.azurewebsites.net/api/Cart
+POST https://.../api/Cart
 Content-Type: application/json; charset=utf-8
 ```
 __Get Cart Contents__
 
 Returns all items within the cart
 ```HTTP
-GET https://samplemarket.azurewebsites.net/api/Cart/{cart-id}
+GET https://.../api/Cart/{cart-id}
 Content-Type: application/json; charset=utf-8
 ```
 __Get Total Cost__
 
 Returns the sum of all items in the cart
 ```HTTP
-GET https://samplemarket.azurewebsites.net/api/Cart/{cart-id}/Total
+GET https://.../api/Cart/{cart-id}/Total
 Content-Type: application/json; charset=utf-8
 ```
 __Add Item to Cart__
@@ -61,7 +61,7 @@ __Add Item to Cart__
 Adds a product to your cart. Only requires the product ID to be sent in the JSON request. 
 Returns the current cart.
 ```HTTP
-POST https://samplemarket.azurewebsites.net/api/Cart/{cart-id}/Add
+POST https://.../api/Cart/{cart-id}/Add
 Content-Type: application/json; charset=utf-8
 Body:
 {
@@ -73,7 +73,7 @@ __Remove Item from Cart__
 Removes a product from your cart. Only requires the product ID to be sent in the JSON request. 
 Returns the current cart.
 ```HTTP
-DELETE https://samplemarket.azurewebsites.net/api/Cart/{cart-id}/Remove
+DELETE https:/.../api/Cart/{cart-id}/Remove
 Content-Type: application/json; charset=utf-8
 Body:
 {
@@ -84,14 +84,14 @@ __Checkout__
 
 Deletes the cart and returns the total cost.
 ```HTTP
-POST https://samplemarket.azurewebsites.net/api/Cart/{cart-id}/Checkout
+POST https://.../api/Cart/{cart-id}/Checkout
 Content-Type: application/json; charset=utf-8
 ```
 __Delete Cart__
 
 Deletes the cart.
 ```HTTP
-DELETE https://samplemarket.azurewebsites.net/api/Cart/{cart-id}
+DELETE https://.../api/Cart/{cart-id}
 Content-Type: application/json; charset=utf-8
 ```
 ## 💻 Tech
